@@ -37,8 +37,10 @@ public class RenderTicksHandler {
             Map.Entry<BlockPos, Integer> entry = iterator.next();
 
             BlockPos pos = entry.getKey();
-            if (!world.isBlockLoaded(pos))
+            if (!world.isBlockLoaded(pos)) {
                 iterator.remove();
+                continue;
+            }
 
             if (world.getTileEntity(pos) != null) {
                 HudRenderHelper.renderHud(
