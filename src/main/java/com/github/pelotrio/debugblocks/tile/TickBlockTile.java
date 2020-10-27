@@ -33,7 +33,8 @@ public class TickBlockTile extends TileEntity implements ITickable {
                             this.ticksPerSecond,
                             this.counter == 0 ? 0 : (int) Math.round(this.totalTicks / (double) this.counter)
                     ),
-                    new NetworkRegistry.TargetPoint(this.world.provider.getDimension(),
+                    new NetworkRegistry.TargetPoint(
+                            this.world.provider.getDimension(),
                             this.getPos().getX(),
                             this.getPos().getY(),
                             this.getPos().getZ(),
@@ -46,7 +47,6 @@ public class TickBlockTile extends TileEntity implements ITickable {
 
             ticksPerSecond = 0;
             timeStampSecond = System.currentTimeMillis();
-
         }
     }
 }

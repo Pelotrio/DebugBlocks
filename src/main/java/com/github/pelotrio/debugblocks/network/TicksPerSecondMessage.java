@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TicksPerSecondMessage implements IMessage, IMessageHandler<TicksPerSecondMessage, IMessage> {
 
@@ -17,7 +17,7 @@ public class TicksPerSecondMessage implements IMessage, IMessageHandler<TicksPer
     private BlockPos pos;
 
     //pos -> ticks per second | average
-    public static final Map<BlockPos, Pair<Integer, Integer>> TICK_MAP = new HashMap<>();
+    public static final Map<BlockPos, Pair<Integer, Integer>> TICK_MAP = new ConcurrentHashMap<>();
 
     public TicksPerSecondMessage() {
     }
