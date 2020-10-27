@@ -49,4 +49,9 @@ public class TickBlockTile extends TileEntity implements ITickable {
             timeStampSecond = System.currentTimeMillis();
         }
     }
+
+    public void resetAverage() {
+        this.counter = 0;
+        this.totalTicks = 0;
+    }
 }
