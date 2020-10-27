@@ -18,6 +18,9 @@ public class TickBlockTile extends TileEntity implements ITickable {
 
     @Override
     public void update() {
+        if (world.isRemote)
+            return;
+
         ticks++;
 
         if ((System.currentTimeMillis() - timeStamp) >= 1000) {
