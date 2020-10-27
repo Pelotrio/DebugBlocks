@@ -4,6 +4,7 @@ import com.github.pelotrio.debugblocks.DebugBlocks;
 import com.github.pelotrio.debugblocks.network.TicksPerSecondMessage;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class TickBlockTile extends TileEntity implements ITickable {
 
@@ -20,7 +21,7 @@ public class TickBlockTile extends TileEntity implements ITickable {
         ticks++;
 
         if ((System.currentTimeMillis() - timeStamp) >= 1000) {
-            DebugBlocks.network.sendToAll(new TicksPerSecondMessage(ticks));
+            DebugBlocks.network.sendToAllAround(new TicksPerSecondMessage(ticks), new NetworkRegistry.TargetPoint(0, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 25));
             System.out.println(ticks);
             ticks = 0;
             timeStamp = System.currentTimeMillis();
