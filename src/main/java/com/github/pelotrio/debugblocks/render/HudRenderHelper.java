@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
+//totally not stolen from https://github.com/McJtyMods/McJtyLib/blob/1.12/src/main/java/mcjty/lib/client/HudRenderHelper.java
 public class HudRenderHelper {
 
     public static void renderHud(List<String> messages, HudPlacement hudPlacement, HudOrientation hudOrientation, EnumFacing orientation, double x, double y, double z, float scale) {
@@ -106,14 +107,14 @@ public class HudRenderHelper {
         }
     }
 
-    public static enum HudPlacement {
+    public enum HudPlacement {
         HUD_ABOVE,
         HUD_ABOVE_FRONT,
         HUD_FRONT,
         HUD_CENTER
     }
 
-    public static enum HudOrientation {
+    public enum HudOrientation {
         HUD_SOUTH,
         HUD_TOPLAYER_HORIZ,
         HUD_TOPLAYER

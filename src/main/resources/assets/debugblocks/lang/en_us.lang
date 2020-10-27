@@ -1,2 +1,3 @@
 #blocks
-tile.tick_block.name=Hallo
+tile.tick_block.name=Tick Block
+item.tick_block.name=Tick Block

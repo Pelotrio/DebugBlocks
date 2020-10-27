@@ -1,6 +1,7 @@
 package com.github.pelotrio.debugblocks;
 
 import com.github.pelotrio.debugblocks.block.TickBlock;
+import com.github.pelotrio.debugblocks.handler.RenderTicksHandler;
 import com.github.pelotrio.debugblocks.network.TicksPerSecondMessage;
 import com.github.pelotrio.debugblocks.tile.TickBlockTile;
 import net.minecraft.block.Block;
@@ -10,11 +11,12 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -43,6 +45,8 @@ public class DebugBlocks {
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
+
+        MinecraftForge.EVENT_BUS.register(new RenderTicksHandler());
 
         int id = 0;
         network.registerMessage(TicksPerSecondMessage.class, TicksPerSecondMessage.class, id++, Side.CLIENT);
@@ -89,8 +93,7 @@ public class DebugBlocks {
          */
         @SubscribeEvent
         public static void addBlocks(RegistryEvent.Register<Block> event) {
-            event.getRegistry().register(new TickBlock().setRegistryName(new ResourceLocation(MOD_ID, "tick_block")));
-
+            event.getRegistry().register(new TickBlock().setRegistryName(new ResourceLocation(MOD_ID, "tick_block")).setTranslationKey("tick_block"));
         }
 
         @SubscribeEvent

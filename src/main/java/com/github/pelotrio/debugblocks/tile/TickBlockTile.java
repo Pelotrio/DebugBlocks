@@ -21,18 +21,10 @@ public class TickBlockTile extends TileEntity implements ITickable {
         ticks++;
 
         if ((System.currentTimeMillis() - timeStamp) >= 1000) {
-            DebugBlocks.network.sendToAllAround(new TicksPerSecondMessage(ticks), new NetworkRegistry.TargetPoint(0, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 25));
-            System.out.println(ticks);
+            DebugBlocks.network.sendToAllAround(new TicksPerSecondMessage(this.getPos(), ticks),
+                    new NetworkRegistry.TargetPoint(this.world.provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 25));
             ticks = 0;
             timeStamp = System.currentTimeMillis();
         }
-    }
-
-    public int getTicks() {
-        return ticks;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
     }
 }
