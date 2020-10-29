@@ -14,6 +14,8 @@ public class TickBlockTile extends TileEntity implements ITickable {
     private long totalTicks;
     private long counter;
 
+    private int average;
+
     public TickBlockTile() {
         this.ticksPerSecond = 0;
         this.timeStampSecond = System.currentTimeMillis();
@@ -27,7 +29,7 @@ public class TickBlockTile extends TileEntity implements ITickable {
         ticksPerSecond++;
 
         if ((System.currentTimeMillis() - timeStampSecond) >= 1000) {
-            DebugBlocks.network.sendToAllAround(
+            DebugBlocks.network.sendToAllTracking(
                     new TicksPerSecondMessage(
                             this.getPos(),
                             this.ticksPerSecond,
@@ -50,8 +52,23 @@ public class TickBlockTile extends TileEntity implements ITickable {
         }
     }
 
+    public void updateData(int average, int tps) {
+        if (world.isRemote) {
+            this.average = average;
+            this.ticksPerSecond = tps;
+        }
+    }
+
     public void resetAverage() {
         this.counter = 0;
         this.totalTicks = 0;
+    }
+
+    public int getTicksPerSecond() {
+        return ticksPerSecond;
+    }
+
+    public int getAverage() {
+        return average;
     }
 }

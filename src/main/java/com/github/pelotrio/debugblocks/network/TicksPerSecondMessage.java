@@ -1,23 +1,20 @@
 package com.github.pelotrio.debugblocks.network;
 
+import com.github.pelotrio.debugblocks.tile.TickBlockTile;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TicksPerSecondMessage implements IMessage, IMessageHandler<TicksPerSecondMessage, IMessage> {
 
     private int tps;
     private int average;
     private BlockPos pos;
-
-    //pos -> ticks per second | average
-    public static final Map<BlockPos, Pair<Integer, Integer>> TICK_MAP = new ConcurrentHashMap<>();
 
     public TicksPerSecondMessage() {
     }
@@ -46,7 +43,16 @@ public class TicksPerSecondMessage implements IMessage, IMessageHandler<TicksPer
 
     @Override
     public IMessage onMessage(TicksPerSecondMessage message, MessageContext ctx) {
-        TICK_MAP.put(message.pos, Pair.of(message.tps, message.average));
+        World world = Minecraft.getMinecraft().world;
+
+        if (!world.isBlockLoaded(message.pos))
+            return null;
+
+        TileEntity te = world.getTileEntity(message.pos);
+        if (!(te instanceof TickBlockTile))
+            return null;
+
+        ((TickBlockTile) te).updateData(message.average, message.tps);
 
         return null;
     }

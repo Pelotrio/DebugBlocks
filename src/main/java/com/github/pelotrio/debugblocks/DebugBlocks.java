@@ -1,9 +1,7 @@
 package com.github.pelotrio.debugblocks;
 
 import com.github.pelotrio.debugblocks.block.TickBlock;
-import com.github.pelotrio.debugblocks.handler.RenderTicksHandler;
-import com.github.pelotrio.debugblocks.network.TicksPerSecondMessage;
-import com.github.pelotrio.debugblocks.tile.TickBlockTile;
+import com.github.pelotrio.debugblocks.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -11,16 +9,15 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 
 @Mod(
@@ -37,6 +34,9 @@ public class DebugBlocks {
     @Mod.Instance(MOD_ID)
     public static DebugBlocks INSTANCE;
 
+    @SidedProxy(clientSide = "com.github.pelotrio.debugblocks.proxy.ClientProxy", serverSide = "com.github.pelotrio.debugblocks.proxy.CommonProxy")
+    public static CommonProxy PROXY;
+
     public static Logger LOGGER;
 
     public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
@@ -46,12 +46,7 @@ public class DebugBlocks {
     public void preinit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
 
-        MinecraftForge.EVENT_BUS.register(new RenderTicksHandler());
-
-        int id = 0;
-        network.registerMessage(TicksPerSecondMessage.class, TicksPerSecondMessage.class, id++, Side.CLIENT);
-
-        GameRegistry.registerTileEntity(TickBlockTile.class, new ResourceLocation(MOD_ID, "tick_block_tile"));
+        PROXY.preInit(event);
     }
 
     /**
@@ -59,7 +54,7 @@ public class DebugBlocks {
      */
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-
+        PROXY.init(event);
     }
 
     /**
